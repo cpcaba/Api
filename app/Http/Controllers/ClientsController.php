@@ -8,6 +8,13 @@ use App\Client;
 use App\Computer;
 class ClientsController extends Controller
 {
+   public function __construct()
+   {
+       // Apply the jwt.auth middleware to all methods in this controller
+       // except for the authenticate method. We don't want to prevent
+       // the user from retrieving their token if they don't already have it
+       $this->middleware('jwt.auth', ['except' => ['authenticate']]);
+   }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +24,7 @@ class ClientsController extends Controller
     public function index()
     {
       $clients = Client::all();
-      return  json_encode($clients);
+      return response()->json($clients);
     }
 
     /**
